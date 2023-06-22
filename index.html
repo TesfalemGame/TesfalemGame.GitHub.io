@@ -1,10 +1,12 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>TESFALEM</title>
 	<meta charset="utf-8" />
+    <script>function myFunction() {document.getElementById("demo").innerHTML = "Paragraph changed.";}
+    </script>
 </head>
-<body style="height: 499px">
+<body style="height: 499px;background-color: chocolate">
     
         <div style="width: 90px; text-align: center; color: #006699">
 
@@ -18,10 +20,25 @@
             rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr<br />
             <br />
             <br />
+    <style>
+        .button {border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display: inline-block;
+            font-size: 16px;margin: 4px 2px;cursor: pointer;}
+
+        .button1 {background-color: #4CAF50;}/* Green */
+        .button2 {background-color: #008CBA;}/* Blue */
+    </style>
+    <button class="button button1">Green</button>
+    
+    <button class="button button2">Blue</button>
+    <button type="button" onclick="document.write(5 + 6)">Try it</button>
+        
+   
             <br />
-            mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm<br />
+    <h1 style="font-size:60px;color:blue;text-align:center;">Heading 1</h1>
+    <br />
             <br />
             <br />
+    <p title="I'm a tooltip">This is a paragraph.</p>
             <br />
             <br />
             lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll<br />
@@ -29,6 +46,45 @@
             <br />
             <br />
             pppppppppppppppppppppppppppppppppppppppppppp
-        
+        <br />
+    <img src="grass1.bmp" width="500" height="500">
+
+    <a href="https://www.w3schools.com">Visit W3Schools</a>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <pre>
+  My Bonnie lies over the ocean.
+  My Bonnie lies over the sea.
+  My Bonnie lies over the ocean.
+  Oh, bring back my Bonnie to me.
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <script>
+            const myCanvas = document.createElement("canvas");
+            document.body.appendChild(myCanvas);
+            const ctx = myCanvas.getContext("2d");
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(20, 20, 150, 100);
+       </script>
+        <script>
+            const canvas = document.getElementById("myCanvas");
+            const ctxg = canvas.getContext("2d");
+
+            ctxg.beginPath();
+            ctxg.moveTo(200, 200);
+            ctxg.lineTo(200, 300);
+            ctxg.lineTo(270, 300);
+            ctxg.stroke();
+            </script>
+</pre>
 </body>
 </html>

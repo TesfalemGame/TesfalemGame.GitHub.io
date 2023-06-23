@@ -1,90 +1,246 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <title>TESFALEM</title>
+    <title></title>
 	<meta charset="utf-8" />
-    <script>function myFunction() {document.getElementById("demo").innerHTML = "Paragraph changed.";}
-    </script>
 </head>
-<body style="height: 499px;background-color: chocolate">
-    
-        <div style="width: 90px; text-align: center; color: #006699">
+<body>
+    <canvas width="570" height="570" id="my_Canvas"></canvas>
 
-        </div>
-        <p>
-            &nbsp;
-        </p>
-        <p>
-            &nbsp;
-        </p>
-            rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr<br />
-            <br />
-            <br />
-    <style>
-        .button {border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display: inline-block;
-            font-size: 16px;margin: 4px 2px;cursor: pointer;}
+    <script>
+         /*================Creating a canvas=================*/
+         var canvas = document.getElementById('my_Canvas');
+         gl = canvas.getContext('experimental-webgl');
 
-        .button1 {background-color: #4CAF50;}/* Green */
-        .button2 {background-color: #008CBA;}/* Blue */
-    </style>
-    <button class="button button1">Green</button>
-    
-    <button class="button button2">Blue</button>
-    <button type="button" onclick="document.write(5 + 6)">Try it</button>
-        
-   
-            <br />
-    <h1 style="font-size:60px;color:blue;text-align:center;">Heading 1</h1>
-    <br />
-            <br />
-            <br />
-    <p title="I'm a tooltip">This is a paragraph.</p>
-            <br />
-            <br />
-            lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll<br />
-            <br />
-            <br />
-            <br />
-            pppppppppppppppppppppppppppppppppppppppppppp
-        <br />
-    <img src="grass1.bmp" width="500" height="500">
+         /*==========Defining and storing the geometry=======*/
 
-    <a href="https://www.w3schools.com">Visit W3Schools</a>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <pre>
-  My Bonnie lies over the ocean.
-  My Bonnie lies over the sea.
-  My Bonnie lies over the ocean.
-  Oh, bring back my Bonnie to me.
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <script>
-            const myCanvas = document.createElement("canvas");
-            document.body.appendChild(myCanvas);
-            const ctx = myCanvas.getContext("2d");
+         var vertices = [
+            -0.5,0.5,0.0,
+            0.0,0.5,0.0,
+            -0.25,0.25,0.0,
+         ];
 
-            ctx.fillStyle = "red";
-            ctx.fillRect(20, 20, 150, 100);
-       </script>
-        <script>
-            const canvas = document.getElementById("myCanvas");
-            const ctxg = canvas.getContext("2d");
+         // Create an empty buffer object to store the vertex buffer
+         var vertex_buffer = gl.createBuffer();
 
-            ctxg.beginPath();
-            ctxg.moveTo(200, 200);
-            ctxg.lineTo(200, 300);
-            ctxg.lineTo(270, 300);
-            ctxg.stroke();
-            </script>
-</pre>
+         //Bind appropriate array buffer to it
+         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+
+         // Pass the vertex data to the buffer
+         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+         // Unbind the buffer
+         gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+         /*=========================Shaders========================*/
+
+         // vertex shader source code
+         var vertCode =
+            'attribute vec3 coordinates;' +
+
+            'void main(void) {' +
+               ' gl_Position = vec4(coordinates, 1.0);' +
+               'gl_PointSize = 10.0;'+
+            '}';
+
+         // Create a vertex shader object
+         var vertShader = gl.createShader(gl.VERTEX_SHADER);
+
+         // Attach vertex shader source code
+         gl.shaderSource(vertShader, vertCode);
+
+         // Compile the vertex shader
+         gl.compileShader(vertShader);
+
+         // fragment shader source code
+         var fragCode =
+            'void main(void) {' +
+               ' gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);' +
+            '}';
+
+         // Create fragment shader object
+         var fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+         // Attach fragment shader source code
+         gl.shaderSource(fragShader, fragCode);
+
+         // Compile the fragmentt shader
+         gl.compileShader(fragShader);
+
+         // Create a shader program object to store
+         // the combined shader program
+         var shaderProgram = gl.createProgram();
+
+         // Attach a vertex shader
+         gl.attachShader(shaderProgram, vertShader);
+
+         // Attach a fragment shader
+         gl.attachShader(shaderProgram, fragShader);
+
+         // Link both programs
+         gl.linkProgram(shaderProgram);
+
+         // Use the combined shader program object
+         gl.useProgram(shaderProgram);
+
+         /*======== Associating shaders to buffer objects ========*/
+
+         // Bind vertex buffer object
+         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+
+         // Get the attribute location
+         var coord = gl.getAttribLocation(shaderProgram, "coordinates");
+
+         // Point an attribute to the currently bound VBO
+         gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0);
+
+         // Enable the attribute
+         gl.enableVertexAttribArray(coord);
+
+         /*============= Drawing the primitive ===============*/
+
+         // Clear the canvas
+         gl.clearColor(0.5, 0.5, 0.5, 0.9);
+
+         // Enable the depth test
+         gl.enable(gl.DEPTH_TEST);
+
+         // Clear the color buffer bit
+         gl.clear(gl.COLOR_BUFFER_BIT);
+
+         // Set the view port
+         gl.viewport(0,0,canvas.width,canvas.height);
+
+         // Draw the triangle
+         gl.drawArrays(gl.POINTS, 0, 3);
+    </script>
+    <br />
+    <br />
+    <br />
+    <canvas width="570" height="570" id="my_Canvastriangle"></canvas>
+
+    <script>
+         /*============== Creating a canvas ====================*/
+        var canvas = document.getElementById('my_Canvastriangle');
+         gl = canvas.getContext('experimental-webgl');
+
+         /*======== Defining and storing the geometry ===========*/
+
+         var vertices = [
+            -0.5,0.5,0.0,
+            -0.5,-0.5,0.0,
+            0.5,-0.5,0.0,
+         ];
+
+         indices = [0,1,2];
+
+         // Create an empty buffer object to store vertex buffer
+         var vertex_buffer = gl.createBuffer();
+
+         // Bind appropriate array buffer to it
+         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+
+         // Pass the vertex data to the buffer
+         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+         // Unbind the buffer
+         gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+         // Create an empty buffer object to store Index buffer
+         var Index_Buffer = gl.createBuffer();
+
+         // Bind appropriate array buffer to it
+         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Index_Buffer);
+
+         // Pass the vertex data to the buffer
+         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+         // Unbind the buffer
+         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
+         /*================ Shaders ====================*/
+
+         // Vertex shader source code
+         var vertCode =
+            'attribute vec3 coordinates;' +
+
+            'void main(void) {' +
+               ' gl_Position = vec4(coordinates, 1.0);' +
+            '}';
+
+         // Create a vertex shader object
+         var vertShader = gl.createShader(gl.VERTEX_SHADER);
+
+         // Attach vertex shader source code
+         gl.shaderSource(vertShader, vertCode);
+
+         // Compile the vertex shader
+         gl.compileShader(vertShader);
+
+         //fragment shader source code
+         var fragCode =
+            'void main(void) {' +
+               ' gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);' +
+            '}';
+
+         // Create fragment shader object
+         var fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+         // Attach fragment shader source code
+         gl.shaderSource(fragShader, fragCode);
+
+         // Compile the fragmentt shader
+         gl.compileShader(fragShader);
+
+         // Create a shader program object to store
+         // the combined shader program
+         var shaderProgram = gl.createProgram();
+
+         // Attach a vertex shader
+         gl.attachShader(shaderProgram, vertShader);
+
+         // Attach a fragment shader
+         gl.attachShader(shaderProgram, fragShader);
+
+         // Link both the programs
+         gl.linkProgram(shaderProgram);
+
+         // Use the combined shader program object
+         gl.useProgram(shaderProgram);
+
+         /*======= Associating shaders to buffer objects =======*/
+
+         // Bind vertex buffer object
+         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+
+         // Bind index buffer object
+         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Index_Buffer);
+
+         // Get the attribute location
+         var coord = gl.getAttribLocation(shaderProgram, "coordinates");
+
+         // Point an attribute to the currently bound VBO
+         gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0);
+
+         // Enable the attribute
+         gl.enableVertexAttribArray(coord);
+
+         /*=========Drawing the triangle===========*/
+
+         // Clear the canvas
+         gl.clearColor(0.5, 0.5, 0.5, 0.9);
+
+         // Enable the depth test
+         gl.enable(gl.DEPTH_TEST);
+
+         // Clear the color buffer bit
+         gl.clear(gl.COLOR_BUFFER_BIT);
+
+         // Set the view port
+         gl.viewport(0,0,canvas.width,canvas.height);
+
+         // Draw the triangle
+         gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT,0);
+    </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-﻿var vertexShaderText =
+var vertexShaderText =
 [
 'precision mediump float;',
 '',
@@ -15,7 +15,7 @@
 '  gl_Position = mProj * mView * mWorld * vec4(vertPosition, 1.0);',
 '}'
 ].join('\n');
-
+var animplay = 1;
 var fragmentShaderText =
 [
 'precision mediump float;',
@@ -255,9 +255,12 @@ var InitDemo = function () {
     var animate = function (time) {
 
         var dt = time - time_old;
-        rotateZ(mov_matrix, dt * 0.005);//time
-        rotateY(mov_matrix, dt * 0.002);
-        rotateX(mov_matrix, dt * 0.003);
+        if (animplay == 2)
+        {
+            rotateZ(mov_matrix, dt * 0.005);//time
+            rotateY(mov_matrix, dt * 0.002);
+            rotateX(mov_matrix, dt * 0.003);
+        }
         time_old = time;
         gl.clearColor(0.75, 0.85, 0.8, 1.0);
         ////gl.depthFunc(gl.LEQUAL);
